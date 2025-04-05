@@ -1,0 +1,150 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default-myPage}">
+	  
+	<head>
+		<link th:href="@{/assets/css/myPage/myPageGame.css}" rel="stylesheet" type="text/css" />
+	</head>
+
+	<th:block layout:fragment="contents-header">
+	    <div class="mypage-user">
+	        <div class="mypage-user-img">
+	            <img th:src="@{|${avatar}|}" alt="이미지">
+	        </div>
+	        <div class="mypage-user-name">
+	            <span th:text="${myPageUserName}"></span>
+	            <span>님, 안녕하세요.</span>
+	        </div>
+	        <div class="mypage-point-coupon">
+	            <div class="mypage-point" data-bs-toggle="modal" data-bs-target="#pointModal">
+	                <div>
+	                    <span>보유 포인트</span>
+	                </div>
+	                <div class="mypage-point-area">
+	                    <span class="mypoint" th:text="${myPageUserPoint}"></span>
+	                    <span>Point</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+		<!-- 포인트 내역 모달 -->
+		<div class="modal fade" id="pointModal" tabindex="-1" aria-labelledby="pointModalLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-lg">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="pointModalLabel">포인트 적립/사용 내역</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="mypage-point-coupon-table">
+		                    <table class="table">
+		                        <thead>
+		                            <tr>
+		                                <th scope="col">포인트 적립/사용 날짜</th>
+		                                <th scope="col">포인트 내역</th>
+		                                <th scope="col">적립/사용 포인트</th>
+		                                <th scope="col">적립/사용 구분</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                        	<th:block th:if="${myPagePointLog != null}">
+			                            <tr th:each="myPagePointLog : ${myPagePointLog}">
+			                                <td th:text="${myPagePointLog.pry}"></td>
+			                                <td th:text="${myPagePointLog.prc}"></td>
+			                                <td th:text="${myPagePointLog.pointReceive}"></td>
+			                                <td th:text="${myPagePointLog.pointDivision}"></td>
+			                            </tr>
+		                        	</th:block>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</th:block>
+	
+	<th:block layout:fragment="contents-body">
+		<div class="mypage-refund-payment">
+	        <span>게임 결제/환불 내역 조회</span>
+	        <div class="mypage-point-coupon-table">
+	            <table class="table">
+	                <thead>
+	                    <tr>
+	                        <th scope="col">순번</th>
+	                        <th scope="col">게임명</th>
+	                        <th scope="col">결제 금액</th>
+	                        <th scope="col">결제 방법</th>
+	                        <th scope="col">결제 날짜</th>
+	                        <th scope="col">결제 상태</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr>
+	                        <td scope="row">1</td>
+	                        <td>Lockdown Protocol</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제</td>
+	                        <td>2024-11-10</td>
+	                        <td>결제 완료</td>
+	                    </tr>
+	                    <tr>
+	                        <td scope="row">2</td>
+	                        <td>Into the radius</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제 취소</td>
+	                        <td>2024-11-11</td>
+	                        <td>환불</td>
+	                    </tr>
+	                    <tr>
+	                        <td scope="row">2</td>
+	                        <td>Into the radius</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제 취소</td>
+	                        <td>2024-11-11</td>
+	                        <td>환불</td>
+	                    </tr>
+	                    <tr>
+	                        <td scope="row">2</td>
+	                        <td>Into the radius</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제 취소</td>
+	                        <td>2024-11-11</td>
+	                        <td>환불</td>
+	                    </tr>
+	                    <tr>
+	                        <td scope="row">2</td>
+	                        <td>Into the radius</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제 취소</td>
+	                        <td>2024-11-11</td>
+	                        <td>환불</td>
+	                    </tr>
+	                    <tr>
+	                        <td scope="row">2</td>
+	                        <td>Into the radius</td>
+	                        <td>₩ 10,000</td>
+	                        <td>카드 결제 취소</td>
+	                        <td>2024-11-11</td>
+	                        <td>환불</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div>
+	</th:block>
+
+	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    		
+    	</script>
+    </th:block>
+            
+</html>

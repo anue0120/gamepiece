@@ -1,0 +1,103 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default-myPage}">
+	  
+	<head>
+		<link th:href="@{/assets/css/myPage/myPageCommunity.css}" rel="stylesheet" type="text/css" />
+	</head>
+
+	<th:block layout:fragment="contents-header">
+	    <div class="mypage-user">
+	        <div class="mypage-user-img">
+	            <img th:src="@{|${avatar}|}" alt="이미지">
+	        </div>
+	        <div class="mypage-user-name">
+	            <span th:text="${myPageUserName}"></span>
+	            <span>님, 안녕하세요.</span>
+	        </div>
+	        <div class="mypage-point-coupon">
+	            <div class="mypage-point" data-bs-toggle="modal" data-bs-target="#pointModal">
+	                <div>
+	                    <span>보유 포인트</span>
+	                </div>
+	                <div class="mypage-point-area">
+	                    <span class="mypoint" th:text="${myPageUserPoint}"></span>
+	                    <span>Point</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+		<!-- 포인트 내역 모달 -->
+		<div class="modal fade" id="pointModal" tabindex="-1" aria-labelledby="pointModalLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-lg">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="pointModalLabel">포인트 적립/사용 내역</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="mypage-point-coupon-table">
+		                    <table class="table">
+		                        <thead>
+		                            <tr>
+		                                <th scope="col">포인트 적립/사용 날짜</th>
+		                                <th scope="col">포인트 내역</th>
+		                                <th scope="col">적립/사용 포인트</th>
+		                                <th scope="col">적립/사용 구분</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                        	<th:block th:if="${myPagePointLog != null}">
+			                            <tr th:each="myPagePointLog : ${myPagePointLog}">
+			                                <td th:text="${myPagePointLog.pry}"></td>
+			                                <td th:text="${myPagePointLog.prc}"></td>
+			                                <td th:text="${myPagePointLog.pointReceive}"></td>
+			                                <td th:text="${myPagePointLog.pointDivision}"></td>
+			                            </tr>
+		                        	</th:block>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</th:block>
+	
+	<th:block layout:fragment="contents-body">
+		<div class="mypage-inquiry">
+		    <span>내 문의글</span>
+		    <div class="common-card-section">
+		    	<th:block th:if="${myPageInquiry != null}" th:each="myPageInquiry : ${myPageInquiry}">
+			        <div class="card-section">
+			            <p class="mypage-inquiry-title" th:text="${myPageInquiry.inquiryTitle}"></p>
+			            <div class="mypage-inquiry-content" th:utext="${myPageInquiry.inquiryContent}"></div>
+			            <p class="mypage-inquiry-ymd" th:text="${myPageInquiry.inquiryYmd}"></p>
+			            <div class="mypage-inquiry-response">
+			                <span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPvhewLhkqo6HK323pZkSMhCHHqvQ4r8fumw&s" />1</span>
+			            </div>
+			        </div>
+		    	</th:block>
+		    </div>
+		    <th:block th:unless="${myPageInquiry != null and not #lists.isEmpty(myPageInquiry)}">
+        		<div class="main-contents" style = "margin-top : 100px; text-align : center; color : white;">
+        			<h5>작성한 문의글이 없습니다.</h5>
+        		</div>
+        	</th:block>
+		</div>
+	</th:block>
+
+	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    		
+    	</script>
+    </th:block>
+            
+</html>

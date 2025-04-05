@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default-myPage}">
+	  
+	<head>
+		<link th:href="@{/assets/css/myPage/myPageEvent.css}" rel="stylesheet" type="text/css" />
+	</head>
+
+	<th:block layout:fragment="contents-header">
+	    <div class="mypage-user">
+	        <div class="mypage-user-img">
+	            <img th:src="@{|${avatar}|}" alt="이미지">
+	        </div>
+	        <div class="mypage-user-name">
+	            <span th:text="${myPageUserName}"></span>
+	            <span>님, 안녕하세요.</span>
+	        </div>
+	        <div class="mypage-point-coupon">
+	            <div class="mypage-point" data-bs-toggle="modal" data-bs-target="#pointModal">
+	                <div>
+	                    <span>보유 포인트</span>
+	                </div>
+	                <div class="mypage-point-area">
+	                    <span class="mypoint" th:text="${myPageUserPoint}"></span>
+	                    <span>Point</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+		<!-- 포인트 내역 모달 -->
+		<div class="modal fade" id="pointModal" tabindex="-1" aria-labelledby="pointModalLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-lg">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="pointModalLabel">포인트 적립/사용 내역</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="mypage-point-coupon-table">
+		                    <table class="table">
+		                        <thead>
+		                            <tr>
+		                                <th scope="col">포인트 적립/사용 날짜</th>
+		                                <th scope="col">포인트 내역</th>
+		                                <th scope="col">적립/사용 포인트</th>
+		                                <th scope="col">적립/사용 구분</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                        	<th:block th:if="${myPagePointLog != null}">
+			                            <tr th:each="myPagePointLog : ${myPagePointLog}">
+			                                <td th:text="${myPagePointLog.pry}"></td>
+			                                <td th:text="${myPagePointLog.prc}"></td>
+			                                <td th:text="${myPagePointLog.pointReceive}"></td>
+			                                <td th:text="${myPagePointLog.pointDivision}"></td>
+			                            </tr>
+		                        	</th:block>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</th:block>
+	
+	<th:block layout:fragment="contents-body">
+		<div class="mypage-event">
+	        <span>참여한 이벤트 조회</span>
+	        <div class="common-card-section">
+		        <th:block th:if="${myPageEvent != null}" th:each="myPageEvent : ${myPageEvent}">
+		            <div class="card-section-md">
+		                <img th:src="@{|${myPageEvent.filePath}|}" alt="이미지" />
+		                <span class="mypage-event-name" th:text="${myPageEvent.evNm}"></span>
+		                <div class="mypage-event-period">
+							<span>이벤트 기간 : </span>
+			                <span th:text="${myPageEvent.evStartYmd}"></span>
+							<span>~</span>
+							<span th:text="${myPageEvent.evEndYmd}"></span>
+						</div>
+		            </div>
+	        	</th:block>
+	        </div>
+	        <th:block th:unless="${myPageEvent != null and not #lists.isEmpty(myPageEvent)}">
+        		<div class="main-contents" style = "margin-top : 100px; text-align : center; color : white;">
+        			<h5>참여한 이벤트가 없습니다.</h5>
+        		</div>
+        	</th:block>
+	    </div>
+	</th:block>
+	
+	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    		
+    	</script>
+    </th:block>
+            
+</html>

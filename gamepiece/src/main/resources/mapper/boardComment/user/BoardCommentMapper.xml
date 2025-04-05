@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gamepiece.user.board.mapper.BoardCommentMapper">
+
+
+
+	<resultMap type="gamepiece.user.board.domain.BoardComment" id="BoardCommentResultMap">
+	  <id column="bc_no"  property="commentNum" />
+	 <result column="bbs_no"  property="boardNum" />
+	 <result column="bc_id"  property="commentUserId" />
+    <result column="bc_cn" property="commentDetail" />
+    <result column="bc_like" property="commentLikeCnt" />
+    <result column="bc_dislike" property="commentDisLikeCnt" />
+    <result column="bc_ymd" property="commentYmd" />
+    
+    
+    <association property="userInfo" javaType="gamepiece.user.user.domain.User">
+ 			<id column="id" property="id" />
+		<result column="authrt_cd" property="authrtCd"/>
+		<result column="authrt_nm" property="authrtNm"/>
+		<result column="user_pw" property="userPswd"/>
+		<result column="user_nm" property="userNm"/>
+		<result column="user_gender" property="userGender"/>
+		<result column="user_eml_addr" property="userEmlAddr"/>
+		<result column="user_brdt" property="userBrdt"/>
+		<result column="user_telno" property="userTelno"/>
+		<result column="user_nn" property="userNn"/>
+		<result column="join_ymd" property="joinYmd"/>
+		<result column="whdwl_ymd" property="whdwlYmd"/>
+		<result column="login_no" property="loginNo"/>
+		<result column="lgn_dt" property="lgnDt"/>
+		<result column="inactive_days" property="inactiveDays"/>
+    </association>
+    
+    
+    <association property="avatarInfo" javaType="gamepiece.user.user.domain.Avatar">
+			<id column="avatar_no" property="avatarNo" />
+		<result column="id" property="id"/>
+		<result column="ps_cd" property="psCd"/>
+		<result column="avatar_yn" property="avatarYn"/>
+		<result column="reg_ymd" property="regYmd"/>
+		<result column="ps_nm" property="psNm"/>
+		</association>
+    
+
+	</resultMap>
+
+
+
+
+
+ <insert id="addComment" parameterType="BoardComment">
+	INSERT INTO board_comments(
+	bc_no, 
+	bbs_no, 
+	bc_id, 
+	bc_cn, 
+	bc_like, 
+	bc_dislike, 
+	bc_ymd)
+	VALUES
+	(CONCAT('bc_', LPAD((
+            SELECT next_num FROM (
+                SELECT MAX(CAST(SUBSTRING_INDEX(bc_no,'bc_',-1) AS UNSIGNED)) + 1 AS next_num 
+                FROM board_comments
+            ) AS temp
+        ), 2, '0')),
+	#{boardNum}, 
+	#{commentUserId},
+	#{commentDetail}, 
+	#{commentLikeCnt}, 
+	#{commentDisLikeCnt}, 
+	CURDATE()
+	)
+</insert>
+ 
+ 
+ 
+ <select id="getCntBoardComment" parameterType="string" resultType="int">
+    SELECT
+        COUNT(*)
+    FROM
+        board_comments
+    WHERE
+    	is_delete = 'active'
+		AND 
+        bbs_no = #{boardNum}
+</select>
+ 
+ 
+<select id="getBoardCommentInfo" parameterType="map" resultMap="BoardCommentResultMap">
+SELECT
+    bco.*,
+    u.*,
+    a.*,
+    f.file_path as "avatarFilePath"    -- avatarInfo.psNm 대신 avatarFilePath 사용
+FROM
+    board_comments bco 
+    INNER JOIN user u ON bco.bc_id = u.id
+    LEFT JOIN avatar a ON u.id = a.id AND a.avatar_yn = '선택'
+    LEFT JOIN point_shop ps ON a.ps_cd = ps.ps_cd AND ps.ps_cate_cd = 'cate_02'
+    LEFT JOIN files f ON ps.file_idx = f.file_idx
+    WHERE  
+    	bco.is_delete = 'active'
+		AND 
+        bbs_no = #{boardNum}
+                
+    LIMIT #{rowPerPage} OFFSET #{offset}
+</select>
+
+
+
+
+
+
+
+ <update id="modifyComment" parameterType="BoardComment">
+
+	UPDATE board_comments
+	SET
+		bc_cn=#{commentDetail}
+	WHERE 
+	bc_no = #{commentNum}
+
+</update>
+
+<update id="removeComment" parameterType="BoardComment">
+		UPDATE 
+			board_comments
+		SET
+			is_delete = 'delete'
+		WHERE 
+			bc_no = #{commentNum}
+
+</update>
+
+
+
+<update id="addCommentLikeCount" parameterType="String">
+		  UPDATE board_comments
+    SET 
+		bc_like= bc_like + 1
+    WHERE 
+    		bc_no = #{commentNum}
+</update>
+
+
+
+<update id="addCommentDisLikeCount" parameterType="String">
+	  UPDATE board_comments	
+    SET 
+	bc_dislike= bc_dislike + 1
+    WHERE 
+    		bc_no = #{commentNum}
+</update>
+
+
+<update id="cancelCommentLikeCount" parameterType="String">
+		  UPDATE board_comments
+    SET 
+		bc_like= bc_like - 1
+    WHERE 
+    		bc_no = #{commentNum}
+</update>
+
+
+
+<update id="cancelCommentDisLikeCount" parameterType="String">
+	  UPDATE board_comments	
+    SET 
+	bc_dislike= bc_dislike - 1
+    WHERE 
+    		bc_no = #{commentNum}
+</update>
+
+
+
+</mapper>

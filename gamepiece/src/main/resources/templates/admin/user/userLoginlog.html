@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/default}">
+
+	<th:block layout:fragment="contents-header"> 	
+		<div class="content-header">
+			<div>
+				<h2 class="content-title">회원 로그인 기록 조회</h2>
+			</div>
+		</div>
+	</th:block>
+	
+	<th:block layout:fragment="contents-body">
+		<div class="card">
+		    <div class="card-body">
+		        <div class="row">
+		            <div class="user-list">
+		               <div class="table-responsive">
+		                   <table class="table table-hover">
+		                       <thead>
+		                           <tr>
+		                               <th>로그인 번호</th>
+		                               <th>아이디</th>
+		                               <th>권한</th>
+		                               <th>로그인 일시</th>
+		                           </tr>
+		                       </thead>
+		                       <tbody>
+		                           <tr th:if="${userLoginlog != null}" th:each="userLoginlog : ${userLoginlog}">
+		                               <td th:text="${userLoginlog.loginNo}"></td>
+		                               <td th:text="${userLoginlog.id}"></td>
+		                               <td th:text="${userLoginlog.authrtNm}"></td>
+		                               <td th:text="${#temporals.format(userLoginlog.lgnDt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+		                           </tr>
+		                           
+		                       </tbody>
+		                   </table>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		<div class="pagination-area mt-30 mb-50" th:if="${not #lists.isEmpty(userLoginlog)}">
+	        <nav>
+	            <ul class="pagination justify-content-center">
+	            	<li class="page-item">
+	                    <a class="page-link" th:href="@{/admin/user/userLoginlog}">
+	                    	<i class="material-icons md-first_page"></i>
+                    	</a>
+	                </li>
+	            	<li class="page-item" th:classappend="${currentPage < 2} ? disabled">
+	                    <a class="page-link" th:href="@{/admin/user/userLoginlog(currentPage=${currentPage - 1})}">
+	                    	<i class="material-icons md-chevron_left"></i>
+                    	</a>
+	                </li>
+	                <th:block th:each="num : ${#numbers.sequence(startPageNum,endPageNum)}">
+		                <li class="page-item" th:classappend="${num == currentPage} ? 'active'">
+		                	<a class="page-link" th:href="@{/admin/user/userLoginlog(currentPage=${num})}" th:text="${num}"></a>
+		                </li>
+	                </th:block>
+	                <li class="page-item" th:classappend="${currentPage eq lastPage} ? disabled">
+	                    <a class="page-link" th:href="@{/admin/user/userLoginlog(currentPage=${currentPage + 1})}">
+	                    	<i class="material-icons md-chevron_right"></i>
+	                    </a>
+	                </li>
+	                <li class="page-item">
+	                    <a class="page-link" th:href="@{/admin/user/userLoginlog(currentPage=${lastPage})}">
+	                    	<i class="material-icons md-last_page"></i>
+	                    </a>
+	                </li>
+	            </ul>
+	        </nav>
+	    </div>
+		</th:block>
+   	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    		
+    	</script>
+    </th:block>
+</html>

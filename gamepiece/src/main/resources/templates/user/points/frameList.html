@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default}">
+	<head>
+		<link rel="stylesheet" th:href="@{/assets/css/point/catepoint.css}" type="text/css"/>
+	</head>
+	<th:block layout:fragment="contents-header">
+         <div class="">
+              <div class="main-div">
+            <ul>
+                <li class="pointshop-cate"><a th:href="@{/point/emoticon}">이모티콘</a></li>
+                <li class="pointshop-cate"><a th:href="@{/point/avatar}">프로필이미지</a></li>
+                <li class="pointshop-cate"><a th:href="@{/point/background}">배경프로필</a></li>
+                <li class="pointshop-cate"><a th:href="@{/point/frame}"  class="text-primary">아바타액자</a></li>
+                <li class="pointshop-cate"><a th:href="@{/point/etc}">기타</a></li>
+                <li class="pointshop-cate"><a th:href="@{/point/history}" th:if="${userId != null}">구매내역</a></li>
+            </ul>
+        <div class="pointshop-Hd" th:if="${userId != null}">
+            <div class="pointshop-top">
+                <div>
+                    
+                </div>
+                <div class = "myPoint">보유 포인트<div><span class="point" th:text="${userPoint}"></span> Point</div></div>
+            </div>
+        </div>
+          </div>
+         </div>
+   	</th:block>
+   	<th:block layout:fragment="contents-body">
+   	<div class="main_div">
+   		<div class="pointShopImg">
+            <div class = "box" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" th:each="l : ${frameList}" th:data-ps-cd="${l.itemCd}">
+                <img th:src="${l.filePath}">
+                <div th:text="${l.itemName}">아이템 1</div>
+                <div class="itemName" th:text="${l.itemPrice}">200Point</div>
+            </div>      
+        </div>	
+    </div>
+    <div class="pagination-area mt-30 mb-50" th:if="${not #lists.isEmpty(frameList)}">
+	       <nav>
+	            <ul class="pagination justify-content-center">
+	            	<li class="page-item">
+	                    <a class="page-link" th:href="@{/point/frame}">
+	                    	<i class="material-icons md-first_page"></i>
+                    	</a>
+	                </li>
+	            	<li class="page-item" th:classappend="${currentPage < 2} ? disabled">
+	                    <a class="page-link" th:href="@{/point/frame(currentPage=${currentPage - 1})}">
+	                    	<i class="material-icons md-chevron_left"></i>
+                    	</a>
+	                </li>
+	                <th:block th:each="num : ${#numbers.sequence(startPageNum,endPageNum)}">
+		                <li class="page-item" th:classappend="${num == currentPage} ? 'active'">
+		                	<a class="page-link" th:href="@{/point/frame(currentPage=${num})}" th:text="${num}"></a>
+		                </li>
+	                </th:block>
+	                <li class="page-item" th:classappend="${currentPage eq lastPage} ? disabled">
+	                    <a class="page-link" th:href="@{/point/frame(currentPage=${currentPage + 1})}">
+	                    	<i class="material-icons md-chevron_right"></i>
+	                    </a>
+	                </li>
+	                <li class="page-item">
+	                    <a class="page-link" th:href="@{/point/frame(currentPage=${lastPage})}">
+	                    	<i class="material-icons md-last_page"></i>
+	                    </a>
+	                </li>
+	            </ul>
+	        </nav>
+	    </div>
+	    <div class="modal fade" id="exampleModalToggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalToggleLabel" aria-modal="true">
+		    <div class="modal-dialog modal-lg">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		            	<div class="modal-top">
+			                <h1 class="modal-title fs-5" id="modal-name">아이템 이름</h1>
+			                <p th:if="${userId != null}">보유 포인트: <span class="point" th:text="${userPoint}"></span> Point</p>
+		                </div>
+		                <p id="modal-cate"></p>
+		            </div>
+		            <div class="modal-body">
+		                <div class="modal-img d-flex justify-content">
+		                    <img id="item-img" alt="아이템 이미지" class="img-fluid">
+		                </div>
+		                <p id="modal-requiredpoint"></p>
+		                <p>이 아이템은 환불할 수 없습니다.</p>
+		            </div>
+		            <div class="modal-footer">
+		                <th:block th:if="${userId != null}">
+		                	<button class="btn btn-primary point-order-Btn">구매하기</button>
+		                </th:block>
+		            	<th:block th:unless="${userId != null}">
+		                	<button class="btn btn-secondary point-order-Btn disabled">로그인 후 구매가 가능합니다.</button>
+		                </th:block>
+		                <button type="button" class="btn btn-secondary modal-close-btn" data-bs-dismiss="modal">취소</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+   	</th:block>
+   	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+		<script th:inline="javascript">
+		$('.box').click(function(){
+			const itemCd= $(this).data('psCd');
+			if(!itemCd) return ;
+			const request = $.ajax({
+				url : '/point/modal',
+				method : 'get',
+				data : { 'itemCd' : itemCd },
+				dataType : 'json'
+			});
+			request.done( data => {
+				console.log(data)
+				$('#modal-name').text(data.itemName);
+		    	$('#item-img').attr('src', data.filePath);
+		    	$('#modal-cate').text(data.cateName);
+		    	$('.modal-footer').find('.point-order-Btn').attr('data-ps-cd', data.itemCd)
+		    											   .attr('data-item-price', data.itemPrice);
+		    	
+		    	$('#exampleModalToggle').modal('show');
+			});
+			request.fail( (jqXHR, textStatus, error) => {
+				console.log(error)
+			});
+		});
+		$('.point-order-Btn').click(function(){
+    		const itemCd= this.dataset.psCd;
+    		const itemPrice= this.dataset.itemPrice;
+    		const purchaseitem = /*[[${purchaseList}]]*/"${purchaseList.psCd}"
+    		const psCd = [];
+    		var stop = false;
+			console.log(purchaseitem)
+			purchaseitem.forEach(element => {
+				psCd.push(element.psCd);
+			})
+			psCd.forEach(element=> {
+				if(itemCd == element) stop = true;
+			})
+			if(stop){
+				alert("이미 구매한 상품입니다");
+				$('.modal-close-btn').click();
+				return;
+			}
+			const myPointValue = /*[[${userPoint}]]*/"userPoint";
+	    	if(Number(itemPrice) >= Number(myPointValue)){
+	    		alert('포인트가 부족합니다.');
+	    		$('.modal-close-btn').click();
+	    		return ;
+	    	}
+			const $form = $('<form />',{action :'/point/addlog', method :'GET'});
+			const log={
+				'itemCd' 	: itemCd,
+				'userId' 	: /*[[${userId}]]*/"userId",
+				'itemPrice' : itemPrice
+			}
+			for(const key in log){
+				const $input = $('<input/>',{name:key, type : 'hidden'});
+				$input.val(log[key]);
+				$form.append($input)
+			}
+			$('body').append($form)
+			$form.submit();
+			
+		});
+		$('#exampleModalToggle').on('hide.bs.modal', function () {
+          //모달이 꺼질때 모든 버튼 인풋 셀렉트 텍스트 에어리어의 포커스를 날린다.
+            $('button, input, select, textarea').each(function () {
+                $(this).blur();
+            });
+        });
+		</script>
+    </th:block>
+</html>

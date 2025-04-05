@@ -1,0 +1,228 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default-myPage}">
+	  
+	<head>
+		<link th:href="@{/assets/css/myPage/myPageUser.css}" rel="stylesheet" type="text/css" />
+	</head>
+	
+	<th:block layout:fragment="contents-body">
+		<div class="mypage-modify">
+	        <span>개인 정보 조회/수정</span>
+	
+	        <div class="mypage-modify-form">
+	            <div class="mypage-profile-frame">
+	                <div class="mypage-profile-frame-area">
+	                <th:block th:object="${avatar}">
+	                    <img id="mypage-profile-img" th:src="@{|${avatar}|}" alt="이미지">
+	                </th:block>
+	                </div>
+	                <div class="mypage-buttons">
+	                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#avatarModal">아바타</button>
+	                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#backgroundModal">배경프로필</button>
+	                </div>
+	            </div>
+	
+	            <!-- 아바타 모달 -->
+	            <div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+	                <div class="modal-dialog modal-lg">
+	                    <div class="modal-content">
+	                        <div class="modal-header">
+	                            <h5 class="modal-title" id="avatarModalLabel">아바타 선택</h5>
+	                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                        </div>
+	                        <div class="modal-body">
+	                            <div class="common-card-section avatar-modal-section">
+	                            </div>
+	                        </div>
+	                        <div class="modal-footer">
+	                            <button type="button" id="closeAvatarBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                            <button type="button" id="saveAvatarBtn" class="btn btn-primary">저장</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+
+	            <!-- 배경프로필 모달 -->
+	            <div class="modal fade" id="backgroundModal" tabindex="-1" aria-labelledby="backgroundModalLabel" aria-hidden="true">
+	                <div class="modal-dialog modal-lg">
+	                    <div class="modal-content">
+	                        <div class="modal-header">
+	                            <h5 class="modal-title" id="backgroundModalLabel">배경프로필 선택</h5>
+	                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                        </div>
+	                        <div class="modal-body">
+	                            <div class="common-card-section background-modal-section">
+	                                <div class="card-section">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="modal-footer">
+	                            <button type="button" id="closeBackgroundBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                            <button type="button" id="saveBackgroundBtn" class="btn btn-primary">저장</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	            <th:block th:object="${myPageUser}">
+		            <form id="modifyUserForm" class="modify-info-form" th:action="@{/modifyUser}" method="post">
+		            	<div class="user-form-group">
+			                <input type="text" id="id" name="id" class="user-insert-form" th:value="${myPageUser.id}" readonly>
+			            </div>
+			            <div class="user-form-group">
+			                <input type="password" id="user-pswd" name="userPswd" class="user-insert-form" th:value="${myPageUser.userPswd}" placeholder="변경할 비밀번호를 입력해주세요">
+			            </div>
+			            <div class="user-form-group">
+			                <input type="password" class="user-insert-form" placeholder="비밀번호를 재입력해주세요">
+			            </div>
+			            <div class="user-form-group">
+			                <input type="email" id="user-eml-addr" name="userEmlAddr" class="user-insert-form" th:value="${myPageUser.userEmlAddr}" placeholder="변경할 이메일을 입력해주세요">
+			            </div>
+			            <div class="user-form-group">
+			                <input type="tel" id="user-telno" name="userTelno" class="user-insert-form" th:value="${myPageUser.userTelno}" placeholder="변경할 전화번호를 입력해주세요">
+			            </div>
+			            <div class="user-form-group">
+			                <input type="text" id="user-nn" name="userNn" class="user-insert-form" th:value="${myPageUser.userNn}" placeholder="변경할 닉네임을 입력해주세요">
+			            </div>
+			            <div class="user-form-group">
+			                <button type="submit" id="modifyUserBtn" class="btn btn-primary common-btn-lg" onclick="return confirm('수정하시겠습니까?')">정보 수정</button>
+			                <button type="button" id="removeUserBtn" class="btn btn-danger common-btn-lg" onclick="removeUser()">탈퇴</button>
+			            </div>
+		            </form>
+	            </th:block>
+	        </div>
+	    </div>
+	</th:block>
+	
+	<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    	
+    	// 아바타 모달 AJAX 요청
+    	$('#avatarModal').on('show.bs.modal', function () {
+    	    $.ajax({
+    	        url: '/avatar',
+    	        method: 'GET',
+    	        success: function (avatars) {
+    	            const modalBody = $('.avatar-modal-section');
+    	            modalBody.empty();
+
+    	            avatars.forEach((avatar) => {
+    	                modalBody.append(`
+    	                    <div class="card-section" data-avatar-url="${avatar.filePath}" data-item-code="${avatar.itemCd}">
+    	                        <img src="${avatar.filePath}" alt="아바타 이미지" />
+    	                        <p class="avatar-name">${avatar.itemName}</p>
+    	                    </div>
+    	                `);
+    	            });
+    	        },
+    	        error: function () {
+    	            alert('오류가 발생했습니다.');
+    	        }
+    	    });
+    	});
+    	
+    	// 아바타 선택
+    	let selectAvatar = null;
+
+		$(document).on('click', '.card-section', function () {
+		    $('.card-section').removeClass('selected');
+		
+		    $(this).addClass('selected');
+		    selectAvatar = $(this).data('itemCode');
+		});
+
+		// 아바타 저장 AJAX 요청
+		$('#saveAvatarBtn').on('click', function () {
+		    if (!selectAvatar) {
+		        alert('아바타를 선택해주세요.');
+		        return;
+		    }
+		
+		    $.ajax({
+		        url: '/saveAvatar',
+		        method: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({ selectAvatar: selectAvatar }),
+		        success: function () {
+		            alert('아바타가 저장되었습니다.');
+		            $('#avatarModal').modal('hide');
+		            location.reload();
+		        },
+		        error: function () {
+		            alert('오류가 발생했습니다.');
+		        }
+		    });
+		});
+		
+		// 배경프로필 모달 AJAX 요청
+    	$('#backgroundModal').on('show.bs.modal', function () {
+    	    $.ajax({
+    	        url: '/background',
+    	        method: 'GET',
+    	        success: function (backgrounds) {
+    	            const modalBody = $('.background-modal-section');
+    	            modalBody.empty();
+
+    	            backgrounds.forEach((background) => {
+    	                modalBody.append(`
+    	                    <div class="card-section" data-avatar-url="${background.filePath}" data-item-code="${background.itemCd}">
+    	                        <img src="${background.filePath}" alt="배경프로필 이미지" />
+    	                        <p class="background-name">${background.itemName}</p>
+    	                    </div>
+    	                `);
+    	            });
+    	        },
+    	        error: function () {
+    	            alert('오류가 발생했습니다.');
+    	        }
+    	    });
+    	});
+		
+    	// 배경프로필 선택
+    	let selectBackground = null;
+
+		$(document).on('click', '.card-section', function () {
+		    $('.card-section').removeClass('selected');
+		
+		    $(this).addClass('selected');
+		    selectBackground = $(this).data('itemCode');
+		});
+
+		// 배경프로필 저장 AJAX 요청
+		$('#saveBackgroundBtn').on('click', function () {
+		    if (!selectBackground) {
+		        alert('배경프로필을 선택해주세요.');
+		        return;
+		    }
+		
+		    $.ajax({
+		        url: '/saveBackground',
+		        method: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({ selectBackground: selectBackground }),
+		        success: function () {
+		            alert('배경프로필이 저장되었습니다.');
+		            $('#backgroundModal').modal('hide');
+		            location.reload();
+		        },
+		        error: function () {
+		            alert('오류가 발생했습니다.');
+		        }
+		    });
+		});
+		
+		// 회원 탈퇴
+		function removeUser() {
+			if(confirm('정말 탈퇴하시겠습니까?')) {
+				alert('탈퇴되었습니다.');
+				location.href="/removeUser";
+			}
+		};
+		
+    	</script>
+    </th:block>
+            
+</html>

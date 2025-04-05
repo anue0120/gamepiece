@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{user/layout/default}">
+<head>
+	<link rel="stylesheet" th:href="@{/assets/css/tournament/tournament.css}" />
+</head>
+	 	<th:block layout:fragment="contents-header">
+		<div class="main-div">
+		   <div class = "tournament-menu">
+		       <ul>
+		           <li><a th:href="@{/tournament/list}" class="button-list">LoL</a></li>
+		           <li><a th:href="@{/tournament/list/valorant}" class="button-list">Valorant</a></li>
+		           <li><a th:href="@{/tournament/list/pubg}" class="button-list active">PUBG</a></li>
+		           <li th:if="${gameName == null}"><a th:href="@{/tournament/matchPrediction}" class="button-list">승부예측</a></li>
+		       </ul>
+			</div>
+		</th:block>
+		<th:block layout:fragment="contents-body">
+			<div class="tournament-div">
+			    <div class="match-info">
+			        <select class="select-year" name="year">
+			            <option value="2024" th:selected="${year} == '2024'">2024년</option>
+			            <option value="2025" th:selected="${year} == '2025'">2025년</option>
+			        </select>
+			        <select class="select-month" name="month">
+			            <option value="01" th:selected="${month} == '01'">1월</option>
+			            <option value="02" th:selected="${month} == '02'">2월</option>
+			            <option value="03" th:selected="${month} == '03'">3월</option>
+			            <option value="04" th:selected="${month} == '04'">4월</option>
+			            <option value="05" th:selected="${month} == '05'">5월</option>
+			            <option value="06" th:selected="${month} == '06'">6월</option>
+			            <option value="07" th:selected="${month} == '07'">7월</option>
+			            <option value="08" th:selected="${month} == '08'">8월</option>
+			            <option value="09" th:selected="${month} == '09'">9월</option>
+			            <option value="10" th:selected="${month} == '10'">10월</option>
+			            <option value="11" th:selected="${month} == '11'">11월</option>
+			            <option value="12" th:selected="${month} == '12'">12월</option>
+			        </select>
+			    </div>
+			    <div class="tournament-match">
+				    <!-- <div class="match-date">
+				        <p>24. 10. 03 목</p>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>21:00</p>
+				            </div>
+				            <div class="is-state-end">
+				                <p>경기 종료</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-win">
+				                        <p>1</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>22:00</p>
+				            </div>
+				            <div class="is-state-end">
+				                <p>경기 종료</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-win">
+				                        <p>1</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				            
+				        </div>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>23:00</p>
+				            </div>
+				            <div class="is-state-end">
+				                <p>경기 종료</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-win">
+				                        <p>1</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="match-date">
+				        <p>24. 10. 04 금</p>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>00:25</p>
+				            </div>
+				            <div class="is-state-ing">
+				                <p>진행중</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>01:25</p>
+				            </div>
+				            <div class="is-state-end">
+				                <p>예정</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="match-time">
+				        <div>
+				            <div class="time-day">
+				                <p>02:25</p>
+				            </div>
+				            <div class="is-state-end">
+				                <p>예정</p>
+				            </div>
+				            <div class="score-div">
+				                <div class="team1">
+				                    <p>team1</p>
+				                    <i class="bi bi-image"></i>
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                </div>
+				                <div class="team2">
+				                    <div class="team-lose">
+				                        <p>0</p>
+				                    </div>
+				                    <i class="bi bi-image"></i>
+				                    <p>team2</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div> -->
+				</div>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel">
+				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5" id="resultModalLabel">Modal title</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>							
+						</div>
+						<div class="modal-body text-center">
+						
+						</div>
+						<div class="modal-footer">
+						
+						</div>
+					</div>
+				</div>
+			</div>
+		</th:block>
+    </div>
+<!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource">
+    	<script th:src="@{/assets/js/tournament/tournament.js}"></script>
+    </th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+		<script th:inline="javascript">
+			const $selectYear = $('.select-year').val();
+			const $selectMonth = $('.select-month').val();
+			
+			const startDay = new Date($selectYear,$selectMonth-1,0)
+			const endDay = new Date($selectYear,$selectMonth,0)
+			
+			const leageName = /*[[${leageName}]]*/"";
+			const gameName = /*[[${gameName}]]*/"";
+			
+			const startStrDate = createSearchDate(startDay);
+			const endStrDate = createSearchDate(endDay);
+			
+			function createSearchDate(day){
+				const year = day.getFullYear();
+				const month = String(day.getMonth()+1).padStart(2,'0');
+				const date = day.getDate();
+				
+				const print = `${year}-${month}-${date} 15:00:00`;
+				
+				return print;
+			}
+			
+			function createDate(day){
+				const convertDate = new Date(day);
+				const weekArr = ["일","월","화","수","목","금","토"];
+				const year = convertDate.getFullYear();
+				const month = convertDate.getMonth()+1;
+				const date = convertDate.getDate();
+				const week = weekArr[convertDate.getDay()];
+				
+				const print = `${month}월 ${date}일 (${week})`;
+				
+				return print;
+			}
+			
+			function getAjaxFn(selectYear, selectMonth){
+				const $tournamentDiv = $('.tournament-match');
+				const request = $.ajax({
+					url : 'https://api-foc.krafton.com/tournament/match-schedule',
+					method : 'get',
+					data : {
+						'lang' : 'ko',
+						'searchStartDt' : startStrDate,
+						'searchEndDt' : endStrDate
+					},
+					beforeSend : function(jqXHR){
+						jqXHR.setRequestHeader('service-namespace', 'PUBG_ESPORTS-c0ce');
+					},
+					dataType : 'json'
+				});
+				request.done(function(data){
+					console.log(data);
+					if (data != null && data._embedded.list.length > 0 ){
+						const reverseArr = [...data._embedded.list].reverse(); 
+						
+						for(const list of reverseArr){
+							const $matchDate = $('<div />',{
+								'class' : 'match-date'
+							});
+							
+							const $matchTime = $('<div />',{
+								'class' : 'match-time'
+							});
+							
+							const $div = $('<div />');
+							const $timeDay = $('<div />',{
+								'class' : 'time-day'
+							});
+							
+							const now = new Date();							
+							const startDate = new Date(list.startAt);
+							const endDate = new Date(list.liveEndAt);
+							const utc = startDate.getTime();
+							const koreaTimeDiff = 9 * 60 * 60 * 1000;
+							const startKoreaDate = new Date(utc + koreaTimeDiff);
+							
+							const hour = startKoreaDate.getHours();
+							const minute = String(startKoreaDate.getMinutes()).padStart(2,'0');
+							const time = `${hour}:${minute}`;
+							
+							const date = createDate(list.startAt);
+							let state = ''; 
+							
+							$matchDate.append(`<p>${date}</p>`);
+							$timeDay.append(`<p>${time}</p>`)
+							$div.append($timeDay);
+							$matchTime.append($div);
+							
+							if(now < startKoreaDate){
+								const $isStateEnd = $('<div />',{
+									'class' : 'is-state-end'
+								});
+								
+								$isStateEnd.append('<p>예정</p>');
+								$div.append($isStateEnd);
+								state = '예정';
+							}else if(endDate == null){
+								const $isStateEnd = $('<div />',{
+									'class' : 'is-state-ing'
+								});
+								
+								$isStateEnd.append('<p>진행중</p>');
+								$div.append($isStateEnd);
+								state = '진행중';
+							}else{
+								const $isStateEnd = $('<div />',{
+									'class' : 'is-state-end'
+								});
+								
+								$isStateEnd.append('<p>경기종료</p>');
+								$div.append($isStateEnd);
+								state = '종료';
+							}
+							
+							const $scoreDiv = $('<div />',{
+								'class' : 'score-div'
+							});
+							
+							$scoreDiv.append(`<p>${list.shortTitle} ${list.title}</p>`);
+							
+							if(state == '종료'){
+								const $button = $('<button />',{
+									'type' : 'button',
+									'id' : 'resultBtn',
+									'class' : 'btn btn-primary',
+									'text' : '결과보기',
+									'style' : 'width:10%;',
+									'data-bs-toggle' : 'modal',
+									'data-bs-target' : '#resultModal',
+									'data-tournament' : list.matchScheduleId,
+									'data-title' : list.title
+								});
+								
+								$div.append($scoreDiv, $button);
+							} else {
+								const $button = $('<button />',{
+									'type' : 'button',
+									'id' : 'resultBtn',
+									'class' : 'btn btn-secondary disabled',
+									'text' : '결과보기',
+									'style' : 'width:10%;',
+									'data-bs-toggle' : 'modal',
+									'data-bs-target' : '#resultModal',
+									'data-tournament' : list.matchScheduleId,
+									'data-title' : list.title
+								});
+								
+								$div.append($scoreDiv, $button);
+							}
+							
+							$tournamentDiv.append($matchDate, $matchTime);
+						}
+					} else {
+						const $div = $('<div />',{
+							'class' : 'match-date'
+						});
+						const $p = $('<p />');
+						$p.text('대회 일정을 찾을 수 없습니다.');
+						$div.append($p);
+						$tournamentDiv.append($div);
+					}
+				});
+				request.fail(function(jQXHR, textStatus, error){
+    				console.log(error);
+    				const $div = $('<div />',{
+						'class' : 'match-date'
+					});
+					const $p = $('<p />');
+					$p.text('대회 일정을 찾을 수 없습니다.');
+					$div.append($p);
+					$tournamentDiv.append($div);
+    			});	
+			}
+			
+			getAjaxFn($selectYear, $selectMonth);
+			
+			$('.select-year').change(function(){
+				const $selectYear = $('.select-year').val();
+				const $selectMonth = $('.select-month').val();
+				getAjaxFn($selectYear, $selectMonth);
+				location.href = `/tournament/list/pubg?year=${$selectYear}&month=${$selectMonth}`;
+			});
+			
+			$('.select-month').change(function(){
+				const $selectYear = $('.select-year').val();
+				const $selectMonth = $('.select-month').val();
+				getAjaxFn($selectYear, $selectMonth);
+				location.href = `/tournament/list/pubg?year=${$selectYear}&month=${$selectMonth}`;
+			});
+			
+			$('.tournament-match').on('click', '#resultBtn', function(){
+				const matchId = $(this).data('tournament');
+				const title = $(this).data('title');
+				console.log(matchId);
+				
+				const request = $.ajax({
+					url : 'https://api-foc.krafton.com/tournament/match-schedule/result',
+					method : 'get',
+					data : {
+						'lang' : 'ko',
+						'matchScheduleId' : matchId
+					},
+					beforeSend : function(jqXHR){
+						jqXHR.setRequestHeader('service-namespace', 'PUBG_ESPORTS-c0ce');
+					},
+					dataType : 'json'
+				});
+				request.done(function(data){
+					console.log(data);
+					const resultArr = data._embedded.list;
+					console.log(resultArr);
+					const $modalBody = $('.modal-body');
+					const $resultModalLabel = $('#resultModalLabel');
+					$resultModalLabel.text(`${title} 경기결과`);
+					$modalBody.empty();
+					
+					if(resultArr.length > 0){
+						const $container = $('<div />',{
+							'class' : 'container text-center border border-primary rounded-4'
+						});
+						
+						const $thRow = $('<div />',{
+							'class' : 'row bg-primary rounded-4 text-light fw-bold rounded-bottom-0'
+						});
+						
+						const $thRank = (`<div class="col">Rank</div>`);
+						const $thTeam = (`<div class="col col-5">Team</div>`);
+						const $thTotal = (`<div class="col">Total</div>`);
+						const $thPlace = (`<div class="col">Place</div>`);
+						const $thKill = (`<div class="col">Kill</div>`);
+						const $thWWCD = (`<div class="col">WWCD</div>`);
+						
+						$thRow.append($thRank, $thTeam, $thTotal, $thPlace, $thKill, $thWWCD);
+						$container.append($thRow);
+						
+						// const $container = $('.container');
+						
+						$(resultArr).each((idx, item) => {
+							console.log(item);
+							
+							const $row = $('<div />',{
+								'class' : 'row border-top border-light-subtle rounded-4 rounded-end-0 rounded-start-0'
+							});
+							
+							const $tdRank = (`<div class="col">${item.rank}</div>`);
+							const $tdTeam = (`<div class="col col-5 text-start">${item.teamDisplayTitle}</div>`);
+							const $tdTotal = (`<div class="col">${item.total}</div>`);
+							const $tdPlace = (`<div class="col">${item.place}</div>`);
+							const $tdKill = (`<div class="col">${item.kill}</div>`);
+							const $tdWWCD = (`<div class="col">${item.wwcd}</div>`);
+							
+							$row.append($tdRank, $tdTeam, $tdTotal, $tdPlace, $tdKill, $tdWWCD);
+							
+							$container.append($row);
+						});
+						
+						$modalBody.append($container);
+						$modalBody.attr('style','height: 60vh;')
+					}else{
+						$modalBody.append('<span>경기결과가 없습니다.</span>');
+						$modalBody.attr('style','height: 30vh;')
+					}
+				});
+				request.fail(function(jQXHR, textStatus, error){
+					console.log(error);
+				});
+				
+			});
+		</script>
+    </th:block>
+</html>

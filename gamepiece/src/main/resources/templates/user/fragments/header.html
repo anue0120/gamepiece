@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header class="main-header navbar" th:fragment="headerFragment">
+	<div class="header-div">
+            <div class="header-img">
+                <img id="header-img" th:src="@{/assets/imgs/logo/GP_logo.png}" th:onclick="|location.href='@{/main}'|"/>
+            </div>
+            <div class="header-cate">
+                <ul>
+                    <li><a th:href="@{/game/steam}">게임</a></li>
+                    <li><a th:href="@{/tournament/list}">대회</a></li>
+                       <li><a th:href="@{/board}">커뮤니티</a></li>
+                    <li><a th:href="@{/point/shop}">포인트샵</a></li>
+                    <li><a th:href="@{/event/progressEvent}">이벤트</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+            	<button type="button" data-bs-toggle="dropdown" id="dropdownAccount" aria-expanded="false">
+            		<span th:if="${session.SID == null}" class="material-symbols-outlined" id="person-img">person</span>
+					<th:block th:unless="${session.SID == null}">
+						<span th:if="${avatar} == null or ${avatar} == ''" class="material-symbols-outlined" id="person-img">person</span>
+						<img  th:unless="${avatar} == null or ${avatar} == ''" id="profile-img" th:src="@{|${avatar}|}" alt="이미지" />
+					</th:block>
+				</button>
+					<ul class="dropdown-menu"  aria-labelledby="dropdownAccount">
+					<th:block th:unless="${session.SID == null}">
+					    <li><a class="dropdown-item" th:href="@{/myPageUser}">마이페이지</a></li>
+						<li><hr class="dropdown-divider"></li>
+					</th:block>
+						<li><a th:if="${session.SID == null}" class="dropdown-item text-primary" th:href="@{/login}">로그인</a></li>
+						<li><a th:if="${session.SID == null}" class="dropdown-item text-primary" th:href="@{/addUser}">회원가입</a></li>
+					    <li><a th:unless="${session.SID == null}" class="dropdown-item text-danger" th:href="@{/logout}">로그아웃</a></li>
+					</ul>
+            </div>
+        </div>
+</header>
+</html>

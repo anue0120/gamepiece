@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/default}">
+    
+	<th:block layout:fragment="contents-header">
+		<div class="content-header">
+			<div>
+				<h2 class="content-title">회원 상세정보 수정</h2>
+			</div>
+		</div>
+	</th:block>
+	
+	<th:block layout:fragment="contents-body">
+	<form id="modifyUserForm" th:action="@{/admin/user/modifyUserInfo}" th:object="${userInfo}" method="get">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+				    <div class="col-lg-5">
+				        <div class="table-responsive">
+				            <table class="table">
+				                <tbody>
+									<tr>
+									    <td>
+									        <div class="itemside">
+									            <label class="info" for="id">아이디</label>
+									        </div>
+									    </td>
+									    <td>
+									    	<input type="text" th:value="*{id}" id="id" name="id" placeholder="Type here" class="form-control" readonly>
+									    </td>
+									</tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="authrtNm">권한명</label>
+								            </div>
+								        </td>
+								        <td>
+							                <select name="authrtNm" id="authrtNm" class="form-control">
+							                	<option value="">권한을 선택해주세요</option>
+							                	<th:block th:if="${authrtInfo}"
+			                                              th:each="authrtInfo : ${authrtInfo}">
+			                                        <option th:text="${authrtInfo.authrtNm}" th:value="${authrtInfo.authrtNm}" th:selected="${authrtInfo.authrtCd} == ${userInfo.authrtCd}"></option>
+			                                    </th:block>
+							                </select>
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userPswd">비밀번호</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{userPswd}" id="userPswd" name="userPswd" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userNm">이름</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{userNm}" id="userNm" name="userNm" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userGender">성별</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<select name="userGender" id="userGender" class="form-control">
+											   	<option value="">성별을 선택해주세요</option>
+											    <option value="M" th:selected="*{userGender == 'M'}">남성</option>
+											    <option value="F" th:selected="*{userGender == 'F'}">여성</option>
+											</select>
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userEmlAddr">이메일주소</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{userEmlAddr}" id="userEmlAddr" name="userEmlAddr" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userBrdt">생년월일</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="date" th:value="*{userBrdt}" id="userBrdt" name="userBrdt" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userTelno">전화번호</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{userTelno}" id="userTelno" name="userTelno" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="userNn">닉네임</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{userNn}" id="userNn" name="userNn" placeholder="Type here" class="form-control">
+								        </td>
+								    </tr>
+								    <tr>
+								        <td>
+								            <div class="itemside">
+								                <label class="info" for="joinYmd">가입일자</label>
+								            </div>
+								        </td>
+								        <td>
+								        	<input type="text" th:value="*{joinYmd}" id="joinYmd" name="joinYmd" placeholder="Type here" class="form-control" readonly>
+								        </td>
+								    </tr>
+								</tbody>
+					        </table>
+					    </div>
+					</div>
+					<!-- <div class="col-md-4">
+						<table class="table" th:object="${userAvatar}">
+							<tr>
+								<td>
+									<div class="itemside">
+										<label class="info" for="avatar">아바타</label>
+									</div>
+								</td>
+								<td>
+									<img th:src="*{imgUrl}" id="avatar">
+									<span class="icon icon-lg bg-primary-light">
+									    <i class="text-primary material-icons md-person"></i>
+									</span>
+								</td>
+							</tr>
+						</table>
+					</div> -->
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-primary" id="modifyUserBtn">수정</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	</th:block>
+      
+      <!--/* 사용자 추가 js file */-->
+    <th:block layout:fragment="customJsResource"></th:block>
+    <!--/* 사용자 추가 js script */-->
+    <th:block layout:fragment="customJs">
+    	<script>
+    		
+    	</script>
+    </th:block>
+</html>
